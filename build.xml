@@ -1,0 +1,16 @@
+<project name="forceatlas2-3d" default="jar" basedir=".">
+    <target name="clean">
+        <delete dir="build"></delete>
+    </target>
+    <target name="compile">
+        <mkdir dir="build"/>
+        <javac srcdir="src" destdir="build" classpath="lib/gephi-toolkit-0.9.2-all.jar"/>
+    </target>
+    <target name="jar" depends="clean, compile">
+        <mkdir dir="dist"/>
+        <jar destfile="dist/forceatlas2-3d.jar"
+             basedir="build"/>
+    </target>
+</project>
+
+
