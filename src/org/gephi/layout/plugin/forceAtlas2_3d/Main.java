@@ -131,30 +131,30 @@ public class Main {
             threadCount = Integer.parseInt(getArg("barnesHutSplits"));
         }
 
-        if (getArg("--barnesHutTheta") != null) {
-            barnesHutTheta = Double.parseDouble(getArg("--barnesHutTheta"));
-        } else if (getArg("--jitterTolerance") != null) {
-            jitterTolerance = Double.parseDouble(getArg("--jitterTolerance"));
-        } else if (getArg("--linLogMode") != null) {
-            linLogMode = getArg("--linLogMode").equalsIgnoreCase("true");
-        } else if (getArg("--scalingRatio") != null) {
-            scalingRatio = Double.parseDouble(getArg("--scalingRatio"));
-        } else if (getArg("--gravity") != null) {
-            gravity = Double.parseDouble(getArg("--gravity"));
-        } else if (getArg("--strongGravityMode") != null) {
-            strongGravityMode = getArg("--strongGravityMode").equalsIgnoreCase("true");
-        } else if (getArg("--outboundAttractionDistribution") != null) {
-            outboundAttractionDistribution = getArg("--outboundAttractionDistribution").equalsIgnoreCase("true");
-        } else if (getArg("--seed") != null) {
-            seed = Long.parseLong(getArg("--seed"));
-        } else if (getArg("--format") != null) {
-            formats.add(getArg("--format"));
-        } else if (getArg("--barnesHutUpdateIter") != null) {
-            barnesHutUpdateIter = Integer.parseInt(getArg("--barnesHutUpdateIter"));
-        } else if (getArg("--updateCenter") != null) {
-            updateCenter = getArg("--updateCenter").equalsIgnoreCase("true");
-        } else if (getArg("--coords") != null) {
-            coordsFile = new File(getArg("--coords"));
+        if (getArg("barnesHutTheta") != null) {
+            barnesHutTheta = Double.parseDouble(getArg("barnesHutTheta"));
+        } else if (getArg("jitterTolerance") != null) {
+            jitterTolerance = Double.parseDouble(getArg("jitterTolerance"));
+        } else if (getArg("linLogMode") != null) {
+            linLogMode = getArg("linLogMode").equalsIgnoreCase("true");
+        } else if (getArg("scalingRatio") != null) {
+            scalingRatio = Double.parseDouble(getArg("scalingRatio"));
+        } else if (getArg("gravity") != null) {
+            gravity = Double.parseDouble(getArg("gravity"));
+        } else if (getArg("strongGravityMode") != null) {
+            strongGravityMode = getArg("strongGravityMode").equalsIgnoreCase("true");
+        } else if (getArg("outboundAttractionDistribution") != null) {
+            outboundAttractionDistribution = getArg("outboundAttractionDistribution").equalsIgnoreCase("true");
+        } else if (getArg("seed") != null) {
+            seed = Long.parseLong(getArg("seed"));
+        } else if (getArg("format") != null) {
+            formats.add(getArg("format"));
+        } else if (getArg("barnesHutUpdateIter") != null) {
+            barnesHutUpdateIter = Integer.parseInt(getArg("barnesHutUpdateIter"));
+        } else if (getArg("updateCenter") != null) {
+            updateCenter = getArg("updateCenter").equalsIgnoreCase("true");
+        } else if (getArg("coords") != null) {
+            coordsFile = new File(getArg("coords"));
             if (!coordsFile.exists()) {
                 System.err.println(coordsFile + " not found.");
                 System.exit(1);
@@ -190,7 +190,6 @@ public class Main {
             node.setY((float) ((0.01 + random.nextDouble()) * 1000) - 500);
             node.setZ((float) ((0.01 + random.nextDouble()) * 1000) - 500);
         }
-        System.out.print("Loaded graph");
         if (coordsFile != null) {
             Map<Object, Node> idToNode = new HashMap<>();
             for (Node n : g.getNodes()) {
