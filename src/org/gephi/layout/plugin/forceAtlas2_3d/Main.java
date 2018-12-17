@@ -55,15 +55,15 @@ public class Main {
     }
 
     private static void addArg(String flag, String description, boolean required, Object defaultValue) {
-        argsMap.put("--" + flag, new Arg(flag, description, required, "" + defaultValue));
+        argsMap.put("--" + flag.toLowerCase(), new Arg(flag, description, required, "" + defaultValue));
     }
 
     private static void addArg(String flag, String description, boolean required) {
-        argsMap.put("--" + flag, new Arg(flag, description, required, null));
+        argsMap.put("--" + flag.toLowerCase(), new Arg(flag, description, required, null));
     }
 
     private static String getArg(String flag) {
-        Arg a = argsMap.get("--" + flag);
+        Arg a = argsMap.get("--" + flag.toLowerCase());
         return a != null ? a.value : null;
     }
 
@@ -73,11 +73,10 @@ public class Main {
         addArg("nsteps", "Number of iterations", false, 1000);
         addArg("barnesHutOptimize", "Whether to use Barnes-Hut optimization (true or false)", false, true);
         addArg("undirected", "Whether input graph is undirected", false, true);
-        addArg("threads", "Number of threads to use. If not specified will use all cores", false);
+        addArg("nthreads", "Number of threads to use. If not specified will use all cores", false);
         addArg("barnesHutSplits", "Number of splits to use for Barnes-Hut tree building. Number of threads used is 8 to the power barnesHutSplits", false);
         addArg("format", "Output file format. One of csv, gdf, gexf, gml, graphml, pajek, txt", false);
         addArg("coords", "Tab separated file containing initial coordinates with headers id, x, y, and, z", false);
-
         addArg("barnesHutTheta", " Theta of the Barnes Hut optimization", false);
         addArg("jitterTolerance", "How much swinging you allow. Above 1 discouraged. Lower gives less speed and more precision.", false);
         addArg("linLogMode", "Switch ForceAtlas' model from lin-lin to lin-log (tribute to Andreas Noack). Makes clusters more tight.", false);
@@ -90,7 +89,7 @@ public class Main {
         addArg("updateCenter", "Update Barnes-Hut region centers every updateCenter iterations when not rebuilding Barnes-Hut tre", false);
 
         for (int i = 0; i < args.length; i++) {
-            Arg a = argsMap.get(args[i]);
+            Arg a = argsMap.get(args[i].toLowerCase());
             if (a == null) {
                 System.err.println("Unknown argument " + args[i]);
                 continue;
@@ -98,7 +97,6 @@ public class Main {
             String value = args[++i];
             a.value = value;
         }
-
 
         Long seed = null;
         int threadCount = Runtime.getRuntime().availableProcessors();
@@ -127,8 +125,8 @@ public class Main {
         if (getArg("barnesHutSplits") != null) {
             barnesHutSplits = Integer.parseInt(getArg("barnesHutSplits"));
         }
-        if (getArg("barnesHutSplits") != null) {
-            threadCount = Integer.parseInt(getArg("barnesHutSplits"));
+        if (getArg("nthreads") != null) {
+            threadCount = Integer.parseInt(getArg("nthreads"));
         }
 
         if (getArg("barnesHutTheta") != null) {

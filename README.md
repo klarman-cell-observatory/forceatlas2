@@ -27,7 +27,7 @@ Flag | Description | Default Value
 --nsteps | Number of iterations | 1000
 --barnesHutOptimize | Whether to use Barnes-Hut optimization (true or false) | true
 --undirected | Whether input graph is undirected | true
---threads | Number of threads to use. | All cores
+--nthreads | Number of threads to use. | All cores
 --format | Output file format. One of csv, gdf, gexf, gml, graphml, pajek, txt | txt
 --barnesHutSplits | Number of splits to use for Barnes-Hut tree building. Number of threads used is 8 to the power barnesHutSplits | 1
 --coords | Tab separated file containing initial coordinates with headers id, x, y, and, z | 
