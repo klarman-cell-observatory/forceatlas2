@@ -131,27 +131,38 @@ public class Main {
 
         if (getArg("barnesHutTheta") != null) {
             barnesHutTheta = Double.parseDouble(getArg("barnesHutTheta"));
-        } else if (getArg("jitterTolerance") != null) {
+        }
+        if (getArg("jitterTolerance") != null) {
             jitterTolerance = Double.parseDouble(getArg("jitterTolerance"));
-        } else if (getArg("linLogMode") != null) {
+        }
+        if (getArg("linLogMode") != null) {
             linLogMode = getArg("linLogMode").equalsIgnoreCase("true");
-        } else if (getArg("scalingRatio") != null) {
+        }
+        if (getArg("scalingRatio") != null) {
             scalingRatio = Double.parseDouble(getArg("scalingRatio"));
-        } else if (getArg("gravity") != null) {
+        }
+        if (getArg("gravity") != null) {
             gravity = Double.parseDouble(getArg("gravity"));
-        } else if (getArg("strongGravityMode") != null) {
+        }
+        if (getArg("strongGravityMode") != null) {
             strongGravityMode = getArg("strongGravityMode").equalsIgnoreCase("true");
-        } else if (getArg("outboundAttractionDistribution") != null) {
+        }
+        if (getArg("outboundAttractionDistribution") != null) {
             outboundAttractionDistribution = getArg("outboundAttractionDistribution").equalsIgnoreCase("true");
-        } else if (getArg("seed") != null) {
+        }
+        if (getArg("seed") != null) {
             seed = Long.parseLong(getArg("seed"));
-        } else if (getArg("format") != null) {
+        }
+        if (getArg("format") != null) {
             formats.add(getArg("format"));
-        } else if (getArg("barnesHutUpdateIter") != null) {
+        }
+        if (getArg("barnesHutUpdateIter") != null) {
             barnesHutUpdateIter = Integer.parseInt(getArg("barnesHutUpdateIter"));
-        } else if (getArg("updateCenter") != null) {
+        }
+        if (getArg("updateCenter") != null) {
             updateCenter = getArg("updateCenter").equalsIgnoreCase("true");
-        } else if (getArg("coords") != null) {
+        }
+        if (getArg("coords") != null) {
             coordsFile = new File(getArg("coords"));
             if (!coordsFile.exists()) {
                 System.err.println(coordsFile + " not found.");

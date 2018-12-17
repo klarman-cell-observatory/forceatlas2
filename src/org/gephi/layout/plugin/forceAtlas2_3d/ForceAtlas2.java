@@ -650,6 +650,30 @@ public class ForceAtlas2 implements Layout {
         return properties.toArray(new LayoutProperty[0]);
     }
 
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "ForceAtlas2{" +
+                "outboundAttCompensation=" + outboundAttCompensation +
+                ", edgeWeightInfluence=" + edgeWeightInfluence +
+                ", jitterTolerance=" + jitterTolerance +
+                ", scalingRatio=" + scalingRatio +
+                ", gravity=" + gravity +
+                ", speed=" + speed +
+                ", speedEfficiency=" + speedEfficiency +
+                ", outboundAttractionDistribution=" + outboundAttractionDistribution +
+                ", adjustSizes=" + adjustSizes +
+                ", barnesHutOptimize=" + barnesHutOptimize +
+                ", barnesHutTheta=" + barnesHutTheta +
+                ", linLogMode=" + linLogMode +
+                ", strongGravityMode=" + strongGravityMode +
+                ", threadCount=" + threadCount +
+                ", currentThreadCount=" + currentThreadCount +
+                ", updateBarnesHutIter=" + updateBarnesHutIter +
+                ", updateCenter=" + updateCenter +
+                ", barnesHutSplits=" + barnesHutSplits +
+                '}';
+    }
+
     private static class SpeedTask implements Callable<Double[]> {
         private Collection<Node> nodes;
 
