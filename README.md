@@ -33,7 +33,7 @@ Flag | Description | Default Value
 --coords | Tab separated file containing initial coordinates with headers id, x, y, and, z | 
 --seed | Seed for random number generation for initial node position | timestamp
 --barnesHutUpdateIter | Update Barnes-Hut tree every barnesHutUpdateIter iterations | 1
---updateCenter | Update Barnes-Hut region centers every updateCenter iterations when not rebuilding Barnes-Hut tree | 
+--updateCenter | Update Barnes-Hut region centers when not rebuilding Barnes-Hut tree | 
 --barnesHutTheta | Theta of the Barnes Hut optimization | 1.2
 --jitterTolerance  | How much swinging you allow. Above 1 discouraged. Lower gives less speed and more precision. | 1.0
 --linLogMode | Switch ForceAtlas' model from lin-lin to lin-log (tribute to Andreas Noack). Makes clusters more tight. | false

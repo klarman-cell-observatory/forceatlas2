@@ -86,7 +86,7 @@ public class Main {
         addArg("outboundAttractionDistribution", "Distributes attraction along outbound edges. Hubs attract less and thus are pushed to the borders.", false);
         addArg("seed", "Seed for random number generation for initial node positions", false);
         addArg("barnesHutUpdateIter", "Update Barnes-Hut tree every barnesHutUpdateIter iterations", false);
-        addArg("updateCenter", "Update Barnes-Hut region centers every updateCenter iterations when not rebuilding Barnes-Hut tre", false);
+        addArg("updateCenter", "Update Barnes-Hut region centers when not rebuilding Barnes-Hut tre", false);
 
         for (int i = 0; i < args.length; i++) {
             Arg a = argsMap.get(args[i].toLowerCase());
