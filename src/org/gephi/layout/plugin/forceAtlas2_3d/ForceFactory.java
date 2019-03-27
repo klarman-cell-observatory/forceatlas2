@@ -139,15 +139,15 @@ public class ForceFactory {
 
             if (distance > 0) {
                 // NB: factor = force / distance
-                double factor = coefficient * n1Layout.mass * n2Layout.mass / distance / distance;
+                double factor = coefficient * n1Layout.getMass() * n2Layout.getMass() / distance / distance;
 
-                n1Layout.dx += xDist * factor;
-                n1Layout.dy += yDist * factor;
-                n1Layout.dz += zDist * factor;
+                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
+                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
+                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
 
-                n2Layout.dx -= xDist * factor;
-                n2Layout.dy -= yDist * factor;
-                n2Layout.dz -= zDist * factor;
+                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
+                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
+                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
             }
         }
 
@@ -163,11 +163,11 @@ public class ForceFactory {
 
             if (distance > 0) {
                 // NB: factor = force / distance
-                double factor = coefficient * nLayout.mass * r.getMass() / distance / distance;
+                double factor = coefficient * nLayout.getMass() * r.getMass() / distance / distance;
 
-                nLayout.dx += xDist * factor;
-                nLayout.dy += yDist * factor;
-                nLayout.dz += zDist * factor;
+                nLayout.setDx(nLayout.getDx() + xDist * factor);
+                nLayout.setDy(nLayout.getDy() + yDist * factor);
+                nLayout.setDz(nLayout.getDz() + zDist * factor);
             }
         }
 
@@ -183,11 +183,11 @@ public class ForceFactory {
 
             if (distance > 0) {
                 // NB: factor = force / distance
-                double factor = coefficient * nLayout.mass * g / distance;
+                double factor = coefficient * nLayout.getMass() * g / distance;
 
-                nLayout.dx -= xDist * factor;
-                nLayout.dy -= yDist * factor;
-                nLayout.dz -= zDist * factor;
+                nLayout.setDx(nLayout.getDx() - xDist * factor);
+                nLayout.setDy(nLayout.getDy() - yDist * factor);
+                nLayout.setDz(nLayout.getDz() - zDist * factor);
             }
         }
     }
@@ -216,26 +216,26 @@ public class ForceFactory {
 
             if (distance > 0) {
                 // NB: factor = force / distance
-                double factor = coefficient * n1Layout.mass * n2Layout.mass / distance / distance;
+                double factor = coefficient * n1Layout.getMass() * n2Layout.getMass() / distance / distance;
 
-                n1Layout.dx += xDist * factor;
-                n1Layout.dy += yDist * factor;
-                n1Layout.dz += zDist * factor;
+                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
+                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
+                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
 
-                n2Layout.dx -= xDist * factor;
-                n2Layout.dy -= yDist * factor;
-                n2Layout.dz -= zDist * factor;
+                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
+                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
+                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
 
             } else if (distance < 0) {
-                double factor = 100 * coefficient * n1Layout.mass * n2Layout.mass;
+                double factor = 100 * coefficient * n1Layout.getMass() * n2Layout.getMass();
 
-                n1Layout.dx += xDist * factor;
-                n1Layout.dy += yDist * factor;
-                n1Layout.dz += zDist * factor;
+                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
+                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
+                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
 
-                n2Layout.dx -= xDist * factor;
-                n2Layout.dy -= yDist * factor;
-                n2Layout.dz -= zDist * factor;
+                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
+                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
+                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
             }
         }
 
@@ -251,17 +251,17 @@ public class ForceFactory {
 
             if (distance > 0) {
                 // NB: factor = force / distance
-                double factor = coefficient * nLayout.mass * r.getMass() / distance / distance;
+                double factor = coefficient * nLayout.getMass() * r.getMass() / distance / distance;
 
-                nLayout.dx += xDist * factor;
-                nLayout.dy += yDist * factor;
-                nLayout.dz += zDist * factor;
+                nLayout.setDx(nLayout.getDx() + xDist * factor);
+                nLayout.setDy(nLayout.getDy() + yDist * factor);
+                nLayout.setDz(nLayout.getDz() + zDist * factor);
             } else if (distance < 0) {
-                double factor = -coefficient * nLayout.mass * r.getMass() / distance;
+                double factor = -coefficient * nLayout.getMass() * r.getMass() / distance;
 
-                nLayout.dx += xDist * factor;
-                nLayout.dy += yDist * factor;
-                nLayout.dz += zDist * factor;
+                nLayout.setDx(nLayout.getDx() + xDist * factor);
+                nLayout.setDy(nLayout.getDy() + yDist * factor);
+                nLayout.setDz(nLayout.getDz() + zDist * factor);
             }
         }
 
@@ -277,11 +277,11 @@ public class ForceFactory {
 
             if (distance > 0) {
                 // NB: factor = force / distance
-                double factor = coefficient * nLayout.mass * g / distance;
+                double factor = coefficient * nLayout.getMass() * g / distance;
 
-                nLayout.dx -= xDist * factor;
-                nLayout.dy -= yDist * factor;
-                nLayout.dz -= zDist * factor;
+                nLayout.setDx(nLayout.getDx() - xDist * factor);
+                nLayout.setDy(nLayout.getDy() - yDist * factor);
+                nLayout.setDz(nLayout.getDz() - zDist * factor);
             }
         }
     }
@@ -316,11 +316,11 @@ public class ForceFactory {
 
             if (distance > 0) {
                 // NB: factor = force / distance
-                double factor = coefficient * nLayout.mass * g;
+                double factor = coefficient * nLayout.getMass() * g;
 
-                nLayout.dx -= xDist * factor;
-                nLayout.dy -= yDist * factor;
-                nLayout.dz -= zDist * factor;
+                nLayout.setDx(nLayout.getDx() - xDist * factor);
+                nLayout.setDy(nLayout.getDy() - yDist * factor);
+                nLayout.setDz(nLayout.getDz() - zDist * factor);
             }
         }
     }
@@ -349,13 +349,13 @@ public class ForceFactory {
             // NB: factor = force / distance
             double factor = -coefficient * e;
 
-            n1Layout.dx += xDist * factor;
-            n1Layout.dy += yDist * factor;
-            n1Layout.dz += zDist * factor;
+            n1Layout.setDx(n1Layout.getDx() + xDist * factor);
+            n1Layout.setDy(n1Layout.getDy() + yDist * factor);
+            n1Layout.setDz(n1Layout.getDz() + zDist * factor);
 
-            n2Layout.dx -= xDist * factor;
-            n2Layout.dy -= yDist * factor;
-            n2Layout.dz -= zDist * factor;
+            n2Layout.setDx(n2Layout.getDx() - xDist * factor);
+            n2Layout.setDy(n2Layout.getDy() - yDist * factor);
+            n2Layout.setDz(n2Layout.getDz() - zDist * factor);
         }
     }
 
@@ -381,15 +381,15 @@ public class ForceFactory {
             double zDist = n1.z() - n2.z();
 
             // NB: factor = force / distance
-            double factor = -coefficient * e / n1Layout.mass;
+            double factor = -coefficient * e / n1Layout.getMass();
 
-            n1Layout.dx += xDist * factor;
-            n1Layout.dy += yDist * factor;
-            n1Layout.dz += zDist * factor;
+            n1Layout.setDx(n1Layout.getDx() + xDist * factor);
+            n1Layout.setDy(n1Layout.getDy() + yDist * factor);
+            n1Layout.setDz(n1Layout.getDz() + zDist * factor);
 
-            n2Layout.dx -= xDist * factor;
-            n2Layout.dy -= yDist * factor;
-            n2Layout.dz -= zDist * factor;
+            n2Layout.setDx(n2Layout.getDx() - xDist * factor);
+            n2Layout.setDy(n2Layout.getDy() - yDist * factor);
+            n2Layout.setDz(n2Layout.getDz() - zDist * factor);
         }
     }
 
@@ -420,13 +420,13 @@ public class ForceFactory {
                 // NB: factor = force / distance
                 double factor = -coefficient * e * Math.log(1 + distance) / distance;
 
-                n1Layout.dx += xDist * factor;
-                n1Layout.dy += yDist * factor;
-                n1Layout.dz += zDist * factor;
+                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
+                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
+                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
 
-                n2Layout.dx -= xDist * factor;
-                n2Layout.dy -= yDist * factor;
-                n2Layout.dz -= zDist * factor;
+                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
+                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
+                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
             }
         }
     }
@@ -456,15 +456,15 @@ public class ForceFactory {
             if (distance > 0) {
 
                 // NB: factor = force / distance
-                double factor = -coefficient * e * Math.log(1 + distance) / distance / n1Layout.mass;
+                double factor = -coefficient * e * Math.log(1 + distance) / distance / n1Layout.getMass();
 
-                n1Layout.dx += xDist * factor;
-                n1Layout.dy += yDist * factor;
-                n1Layout.dz += zDist * factor;
+                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
+                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
+                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
 
-                n2Layout.dx -= xDist * factor;
-                n2Layout.dy -= yDist * factor;
-                n2Layout.dz -= zDist * factor;
+                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
+                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
+                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
             }
         }
     }
@@ -495,13 +495,13 @@ public class ForceFactory {
                 // NB: factor = force / distance
                 double factor = -coefficient * e;
 
-                n1Layout.dx += xDist * factor;
-                n1Layout.dy += yDist * factor;
-                n1Layout.dz += zDist * factor;
+                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
+                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
+                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
 
-                n2Layout.dx -= xDist * factor;
-                n2Layout.dy -= yDist * factor;
-                n2Layout.dz -= zDist * factor;
+                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
+                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
+                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
             }
         }
     }
@@ -530,15 +530,15 @@ public class ForceFactory {
 
             if (distance > 0) {
                 // NB: factor = force / distance
-                double factor = -coefficient * e / n1Layout.mass;
+                double factor = -coefficient * e / n1Layout.getMass();
 
-                n1Layout.dx += xDist * factor;
-                n1Layout.dy += yDist * factor;
-                n1Layout.dz += zDist * factor;
+                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
+                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
+                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
 
-                n2Layout.dx -= xDist * factor;
-                n2Layout.dy -= yDist * factor;
-                n2Layout.dz -= zDist * factor;
+                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
+                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
+                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
             }
         }
     }
@@ -570,13 +570,13 @@ public class ForceFactory {
                 // NB: factor = force / distance
                 double factor = -coefficient * e * Math.log(1 + distance) / distance;
 
-                n1Layout.dx += xDist * factor;
-                n1Layout.dy += yDist * factor;
-                n1Layout.dz += zDist * factor;
+                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
+                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
+                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
 
-                n2Layout.dx -= xDist * factor;
-                n2Layout.dy -= yDist * factor;
-                n2Layout.dz -= zDist * factor;
+                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
+                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
+                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
             }
         }
     }
@@ -606,15 +606,15 @@ public class ForceFactory {
             if (distance > 0) {
 
                 // NB: factor = force / distance
-                double factor = -coefficient * e * Math.log(1 + distance) / distance / n1Layout.mass;
+                double factor = -coefficient * e * Math.log(1 + distance) / distance / n1Layout.getMass();
 
-                n1Layout.dx += xDist * factor;
-                n1Layout.dy += yDist * factor;
-                n1Layout.dz += zDist * factor;
+                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
+                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
+                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
 
-                n2Layout.dx -= xDist * factor;
-                n2Layout.dy -= yDist * factor;
-                n2Layout.dz -= zDist * factor;
+                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
+                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
+                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
             }
         }
     }

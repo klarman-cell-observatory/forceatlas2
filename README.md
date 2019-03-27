@@ -1,4 +1,4 @@
-# Gephi Force Atlas2 in 3-d
+# Gephi Force Atlas2 in 2 or 3-d
 
 ## Features
 
@@ -26,10 +26,11 @@ Flag | Description | Default Value
 --output | Output file | 
 --nsteps | Number of iterations | 1000
 --barnesHutOptimize | Whether to use Barnes-Hut optimization (true or false) | true
+--2d | Whether to produce a 2d layout | false
 --undirected | Whether input graph is undirected | true
 --nthreads | Number of threads to use. | All cores
 --format | Output file format. One of csv, gdf, gexf, gml, graphml, pajek, txt | txt
---barnesHutSplits | Number of splits to use for Barnes-Hut tree building. Number of threads used is 8 to the power barnesHutSplits | 1
+--barnesHutSplits | Number of splits to use for Barnes-Hut tree building. Number of threads used is 8 to the power barnesHutSplits for 3d or 4 to the power barnesHutSplits for 2d | All cores
 --coords | Tab separated file containing initial coordinates with headers id, x, y, and, z | 
 --seed | Seed for random number generation for initial node position | timestamp
 --barnesHutUpdateIter | Update Barnes-Hut tree every barnesHutUpdateIter iterations | 1

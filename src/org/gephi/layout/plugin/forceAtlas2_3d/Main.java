@@ -9,7 +9,6 @@ import org.gephi.io.importer.api.Container;
 import org.gephi.io.importer.api.EdgeDirectionDefault;
 import org.gephi.io.importer.api.ImportController;
 import org.gephi.io.processor.plugin.DefaultProcessor;
-
 import org.gephi.layout.spi.Layout;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -86,7 +85,8 @@ public class Main {
         addArg("outboundAttractionDistribution", "Distributes attraction along outbound edges. Hubs attract less and thus are pushed to the borders.", false);
         addArg("seed", "Seed for random number generation for initial node positions", false);
         addArg("barnesHutUpdateIter", "Update Barnes-Hut tree every barnesHutUpdateIter iterations", false);
-        addArg("updateCenter", "Update Barnes-Hut region centers when not rebuilding Barnes-Hut tre", false);
+        addArg("updateCenter", "Update Barnes-Hut region centers when not rebuilding Barnes-Hut tree", false);
+        addArg("2d", "Generate a 2d layout", false);
 
         for (int i = 0; i < args.length; i++) {
             Arg a = argsMap.get(args[i].toLowerCase());
@@ -99,6 +99,7 @@ public class Main {
         }
 
         Long seed = null;
+        boolean is3d = true;
         int threadCount = Runtime.getRuntime().availableProcessors();
         Double barnesHutTheta = null;
         Double jitterTolerance = null;
@@ -162,6 +163,9 @@ public class Main {
         if (getArg("updateCenter") != null) {
             updateCenter = getArg("updateCenter").equalsIgnoreCase("true");
         }
+        if (getArg("2d") != null) {
+            is3d = !getArg("2d").equalsIgnoreCase("true");
+        }
         if (getArg("coords") != null) {
             coordsFile = new File(getArg("coords"));
             if (!coordsFile.exists()) {
@@ -190,14 +194,18 @@ public class Main {
         }
         Graph graph = graphModel.getGraph();
         importController.process(container, new DefaultProcessor(), workspace);
-        org.gephi.layout.plugin.forceAtlas2_3d.ForceAtlas2 layout = new org.gephi.layout.plugin.forceAtlas2_3d.ForceAtlas2(null);
+        org.gephi.layout.plugin.forceAtlas2_3d.ForceAtlas2 layout = new org.gephi.layout.plugin.forceAtlas2_3d.ForceAtlas2(null, is3d);
         layout.setGraphModel(graphModel);
         Random random = seed != null ? new Random(seed) : new Random();
 
         for (Node node : graph.getNodes()) {
             node.setX((float) ((0.01 + random.nextDouble()) * 1000) - 500);
             node.setY((float) ((0.01 + random.nextDouble()) * 1000) - 500);
-            node.setZ((float) ((0.01 + random.nextDouble()) * 1000) - 500);
+            if (is3d) {
+                node.setZ((float) ((0.01 + random.nextDouble()) * 1000) - 500);
+            } else {
+                node.setZ(0);
+            }
         }
         if (coordsFile != null) {
             Map<Object, Node> idToNode = new HashMap<>();
@@ -226,7 +234,9 @@ public class Main {
                 if (n != null) {
                     n.setX(Float.parseFloat(tokens[xIndex]));
                     n.setY(Float.parseFloat(tokens[yIndex]));
-                    n.setZ(Float.parseFloat(tokens[zIndex]));
+                    if (is3d) {
+                        n.setZ(Float.parseFloat(tokens[zIndex]));
+                    }
                 } else {
                     System.err.println(id + " not found");
                 }
@@ -274,6 +284,7 @@ public class Main {
         final String _output = output;
         final Graph _g = g;
         final Layout _layout = layout;
+        final boolean _is3d = is3d;
         final PrintWriter distanceWriter = new PrintWriter(new FileWriter(output + ".distances.txt"));
         distanceWriter.print("step\tdistance\n");
 
@@ -281,7 +292,7 @@ public class Main {
             @Override
             public void run() {
                 _layout.endAlgo();
-                writeOutput(_g, true, _formats, _output);
+                writeOutput(_g, _is3d, _formats, _output);
                 distanceWriter.close();
             }
         };

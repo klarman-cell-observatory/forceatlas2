@@ -41,16 +41,17 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.layout.plugin.forceAtlas2_3d;
 
-import javax.swing.Icon;
-import javax.swing.JPanel;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutUI;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
+import javax.swing.*;
+
 /**
  * Layout Builder
+ *
  * @author Mathieu Jacomy
  */
 @ServiceProvider(service = LayoutBuilder.class)
@@ -70,7 +71,7 @@ public class ForceAtlas2Builder implements LayoutBuilder {
 
     @Override
     public ForceAtlas2 buildLayout() {
-        ForceAtlas2 layout = new ForceAtlas2(this);
+        ForceAtlas2 layout = new ForceAtlas2(this, true);
         return layout;
     }
 
