@@ -1,4 +1,4 @@
-# Gephi Force Atlas2 in 2 or 3-d
+# Multithreaded Gephi Force Atlas2 Layout in 2 or 3-d
 
 ## Features
 
