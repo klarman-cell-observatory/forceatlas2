@@ -96,10 +96,12 @@ public class ForceAtlas2 implements Layout {
     private int barnesHutSplits = -1;
     private double distance;
     private final boolean is3d;
+    private final boolean useAltSpeed;
 
-    public ForceAtlas2(ForceAtlas2Builder layoutBuilder, boolean is3d) {
+    public ForceAtlas2(ForceAtlas2Builder layoutBuilder, boolean is3d, boolean useAltSpeed) {
         this.layoutBuilder = layoutBuilder;
         this.is3d = is3d;
+        this.useAltSpeed = useAltSpeed;
         this.threadCount = Runtime.getRuntime().availableProcessors();
     }
 
@@ -245,7 +247,7 @@ public class ForceAtlas2 implements Layout {
         for (int t = currentThreadCount; t > 0; t--) {
             int from = (int) Math.floor(nodes.length * (t - 1) / currentThreadCount);
             int to = (int) Math.floor(nodes.length * t / currentThreadCount);
-            futures.add(pool.submit(new ApplyForcesTask(nodesList.subList(from, to), adjustSizes, speed)));
+            futures.add(pool.submit(new ApplyForcesTask(nodesList.subList(from, to), adjustSizes, speed, useAltSpeed)));
         }
 
         double distance = 0;
@@ -726,11 +728,13 @@ public class ForceAtlas2 implements Layout {
         private Collection<Node> nodes;
         private boolean adjustSizes;
         private double speed;
+        private boolean useAltSpeed;
 
-        private ApplyForcesTask(List<Node> nodes, boolean adjustSizes, double speed) {
+        private ApplyForcesTask(List<Node> nodes, boolean adjustSizes, double speed, boolean useAltSpeed) {
             this.nodes = nodes;
             this.adjustSizes = adjustSizes;
             this.speed = speed;
+            this.useAltSpeed = useAltSpeed;
         }
 
         public Double call() {
@@ -770,6 +774,10 @@ public class ForceAtlas2 implements Layout {
                         double swinging = nLayout.getMass() * Math.sqrt((nLayout.getOld_dx() - nLayout.getDx()) * (nLayout.getOld_dx() - nLayout.getDx()) + (nLayout.getOld_dy() - nLayout.getDy()) * (nLayout.getOld_dy() - nLayout.getDy())
                                 + (nLayout.getOld_dz() - nLayout.getDz()) * (nLayout.getOld_dz() - nLayout.getDz()));
                         double factor = speed / (1f + Math.sqrt(speed * swinging));
+
+                        if (useAltSpeed) {
+                            factor = Math.min(0.1 * factor, 10.0 / Math.sqrt(Math.pow(nLayout.getDx(), 2) + Math.pow(nLayout.getDy(), 2) + Math.pow(nLayout.getDz(), 2)));
+                        }
 
                         double x = n.x() + nLayout.getDx() * factor;
                         double y = n.y() + nLayout.getDy() * factor;

@@ -71,7 +71,7 @@ public class ForceAtlas2Builder implements LayoutBuilder {
 
     @Override
     public ForceAtlas2 buildLayout() {
-        ForceAtlas2 layout = new ForceAtlas2(this, true);
+        ForceAtlas2 layout = new ForceAtlas2(this, true, false);
         return layout;
     }
 

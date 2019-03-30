@@ -74,6 +74,7 @@ public class Main {
         addArg("nsteps", "Number of iterations", true);
         addArg("targetChangePerNode", "Maximum change per node to stop the algorithm", true);
         addArg("2d", "Generate a 2d layout", false, false);
+        addArg("useAltSpeed", "Use alternative speed calculation, which is documented in the ForceAtlas2 paper.", false, false);
         addArg("directed", "Whether input graph is undirected", false, false);
         addArg("nthreads", "Number of threads to use. If not specified will use all cores", true);
         addArg("format", "Output file format. One of csv, gdf, gexf, gml, graphml, pajek, txt", true);
@@ -105,6 +106,7 @@ public class Main {
 
         Long seed = null;
         boolean is3d = true;
+        boolean useAltSpeed = false;
         int threadCount = Runtime.getRuntime().availableProcessors();
         Double barnesHutTheta = null;
         Double jitterTolerance = null;
@@ -197,6 +199,7 @@ public class Main {
         updateCenter = getArg("updateCenter").equalsIgnoreCase("true");
 
         is3d = !getArg("2d").equalsIgnoreCase("true");
+        useAltSpeed = getArg("useAltSpeed").equalsIgnoreCase("true");
 
         if (getArg("coords") != null) {
             coordsFile = new File(getArg("coords"));
@@ -225,7 +228,7 @@ public class Main {
             g = graphModel.getDirectedGraph();
         }
         importController.process(container, new DefaultProcessor(), workspace);
-        org.gephi.layout.plugin.forceAtlas2_3d.ForceAtlas2 layout = new org.gephi.layout.plugin.forceAtlas2_3d.ForceAtlas2(null, is3d);
+        org.gephi.layout.plugin.forceAtlas2_3d.ForceAtlas2 layout = new org.gephi.layout.plugin.forceAtlas2_3d.ForceAtlas2(null, is3d, useAltSpeed);
         layout.setGraphModel(graphModel);
         Random random = seed != null ? new Random(seed) : new Random();
 
@@ -363,7 +366,7 @@ public class Main {
                 ++nsteps;
                 layout.goAlgo();
                 changePerNode = layout.getDistance() / num_nodes;
-                if (nsteps % 500 == 0) System.out.println(nsteps + " iterations, change_per_node = " + changePerNode);
+                if (nsteps % 100 == 0) System.out.println(nsteps + " iterations, change_per_node = " + changePerNode);
             } while (nsteps == 1 || changePerNode > targetChangePerNode);
 
             System.out.println("Finished in " + nsteps + " iterations, change_per_node = " + changePerNode);
