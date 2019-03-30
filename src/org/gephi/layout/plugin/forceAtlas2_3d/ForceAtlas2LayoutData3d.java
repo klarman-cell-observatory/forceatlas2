@@ -66,6 +66,8 @@ public class ForceAtlas2LayoutData3d extends ForceAtlas2LayoutData2d {
     public void setOld_dz(double old_dz) {
         this.old_dz = old_dz;
     }
+
+    public synchronized void augmentDz(double ddz) {
+        this.dz += ddz;
+    }
 }
-
-

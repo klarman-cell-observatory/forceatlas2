@@ -110,4 +110,15 @@ public class ForceAtlas2LayoutData2d implements ForceAtlas2LayoutData {
     public void setMass(double mass) {
         this.mass = mass;
     }
+
+    public synchronized void augmentDx(double ddx) {
+        this.dx += ddx;
+    }
+
+    public synchronized void augmentDy(double ddy) {
+        this.dy += ddy;
+    }
+
+    public void augmentDz(double ddz) {
+    }
 }

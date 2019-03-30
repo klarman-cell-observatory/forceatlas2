@@ -91,7 +91,6 @@ public class NodesThread implements Runnable {
                 }
             }
         }
-
         // Gravity
         for (int nIndex = from; nIndex < to; nIndex++) {
             Node n = nodes[nIndex];

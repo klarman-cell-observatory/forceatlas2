@@ -78,4 +78,11 @@ public interface ForceAtlas2LayoutData extends LayoutData {
     public double getMass();
 
     public void setMass(double mass);
+
+    // synchronized augment functions, only used for updating attraction force
+    public void augmentDx(double ddx);
+
+    public void augmentDy(double ddy);
+
+    public void augmentDz(double ddz);
 }

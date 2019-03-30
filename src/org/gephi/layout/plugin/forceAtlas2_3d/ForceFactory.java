@@ -112,6 +112,8 @@ public class ForceFactory {
         public abstract void apply(Node n, Region r);           // Model for Barnes Hut approximation
 
         public abstract void apply(Node n, double g);           // Model for gravitation (anti-repulsion)
+
+        public abstract void apply_BH(Node n, Node o);             // Model for node-node repulsion in quadtree (BH), do not update both n and o
     }
 
     /*
@@ -188,6 +190,27 @@ public class ForceFactory {
                 nLayout.setDx(nLayout.getDx() - xDist * factor);
                 nLayout.setDy(nLayout.getDy() - yDist * factor);
                 nLayout.setDz(nLayout.getDz() - zDist * factor);
+            }
+        }
+
+        @Override
+        public void apply_BH(Node n, Node o) {
+            ForceAtlas2LayoutData nLayout = n.getLayoutData();
+            ForceAtlas2LayoutData oLayout = o.getLayoutData();
+
+            // Get the distance
+            double xDist = n.x() - o.x();
+            double yDist = n.y() - o.y();
+            double zDist = n.z() - o.z();
+            double distance = Math.sqrt(xDist * xDist + yDist * yDist + zDist * zDist);
+
+            if (distance > 0) {
+                // NB: factor = force / distance
+                double factor = coefficient * nLayout.getMass() * oLayout.getMass() / distance / distance;
+
+                nLayout.setDx(nLayout.getDx() + xDist * factor);
+                nLayout.setDy(nLayout.getDy() + yDist * factor);
+                nLayout.setDz(nLayout.getDz() + zDist * factor);
             }
         }
     }
@@ -284,6 +307,26 @@ public class ForceFactory {
                 nLayout.setDz(nLayout.getDz() - zDist * factor);
             }
         }
+
+        @Override
+        public void apply_BH(Node n, Node o) {
+            ForceAtlas2LayoutData nLayout = n.getLayoutData();
+            ForceAtlas2LayoutData oLayout = o.getLayoutData();
+            // Get the distance
+            double xDist = n.x() - o.x();
+            double yDist = n.y() - o.y();
+            double zDist = n.z() - o.z();
+            double distance = Math.sqrt(xDist * xDist + yDist * yDist + zDist * zDist) - n.size() - o.size();
+
+            if (distance > 0) {
+                // NB: factor = force / distance
+                double factor = coefficient * nLayout.getMass() * oLayout.getMass() / distance / distance;
+
+                nLayout.setDx(nLayout.getDx() + xDist * factor);
+                nLayout.setDy(nLayout.getDy() + yDist * factor);
+                nLayout.setDz(nLayout.getDz() + zDist * factor);
+            }
+        }
     }
 
     private class strongGravity extends RepulsionForce {
@@ -323,6 +366,11 @@ public class ForceFactory {
                 nLayout.setDz(nLayout.getDz() - zDist * factor);
             }
         }
+
+        @Override
+        public void apply_BH(Node n, Node o) {
+            // Not Relevant
+        }
     }
 
     /*
@@ -349,13 +397,25 @@ public class ForceFactory {
             // NB: factor = force / distance
             double factor = -coefficient * e;
 
-            n1Layout.setDx(n1Layout.getDx() + xDist * factor);
-            n1Layout.setDy(n1Layout.getDy() + yDist * factor);
-            n1Layout.setDz(n1Layout.getDz() + zDist * factor);
+            // if (n1.getId().equals("10812")) {
+            //     System.out.println("before (" + n2.getId() + ") " + n1Layout.getDx() + " " + n1Layout.getDy());
+            // }
+            n1Layout.augmentDx(xDist * factor);
+            n1Layout.augmentDy(yDist * factor);
+            n1Layout.augmentDz(zDist * factor);
+            // if (n1.getId().equals("10812")) {
+            //     System.out.println("after(" + n2.getId() +  ") " + n1Layout.getDx() + " " + n1Layout.getDy());
+            // }
 
-            n2Layout.setDx(n2Layout.getDx() - xDist * factor);
-            n2Layout.setDy(n2Layout.getDy() - yDist * factor);
-            n2Layout.setDz(n2Layout.getDz() - zDist * factor);
+            // if (n2.getId().equals("10812")) {
+            //     System.out.println("before (" + n1.getId() + ") " + n2Layout.getDx() + " " + n2Layout.getDy());
+            // }
+            n2Layout.augmentDx(- xDist * factor);
+            n2Layout.augmentDy(- yDist * factor);
+            n2Layout.augmentDz(- zDist * factor);
+            // if (n2.getId().equals("10812")) {
+            //     System.out.println("after (" + n1.getId() + ") " + n2Layout.getDx() + " " + n2Layout.getDy());
+            // }
         }
     }
 
@@ -383,13 +443,13 @@ public class ForceFactory {
             // NB: factor = force / distance
             double factor = -coefficient * e / n1Layout.getMass();
 
-            n1Layout.setDx(n1Layout.getDx() + xDist * factor);
-            n1Layout.setDy(n1Layout.getDy() + yDist * factor);
-            n1Layout.setDz(n1Layout.getDz() + zDist * factor);
+            n1Layout.augmentDx(xDist * factor);
+            n1Layout.augmentDy(yDist * factor);
+            n1Layout.augmentDz(zDist * factor);
 
-            n2Layout.setDx(n2Layout.getDx() - xDist * factor);
-            n2Layout.setDy(n2Layout.getDy() - yDist * factor);
-            n2Layout.setDz(n2Layout.getDz() - zDist * factor);
+            n2Layout.augmentDx(- xDist * factor);
+            n2Layout.augmentDy(- yDist * factor);
+            n2Layout.augmentDz(- zDist * factor);
         }
     }
 
@@ -420,13 +480,13 @@ public class ForceFactory {
                 // NB: factor = force / distance
                 double factor = -coefficient * e * Math.log(1 + distance) / distance;
 
-                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
-                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
-                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
+                n1Layout.augmentDx(xDist * factor);
+                n1Layout.augmentDy(yDist * factor);
+                n1Layout.augmentDz(zDist * factor);
 
-                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
-                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
-                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
+                n2Layout.augmentDx(- xDist * factor);
+                n2Layout.augmentDy(- yDist * factor);
+                n2Layout.augmentDz(- zDist * factor);
             }
         }
     }
@@ -458,13 +518,13 @@ public class ForceFactory {
                 // NB: factor = force / distance
                 double factor = -coefficient * e * Math.log(1 + distance) / distance / n1Layout.getMass();
 
-                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
-                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
-                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
+                n1Layout.augmentDx(xDist * factor);
+                n1Layout.augmentDy(yDist * factor);
+                n1Layout.augmentDz(zDist * factor);
 
-                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
-                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
-                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
+                n2Layout.augmentDx(- xDist * factor);
+                n2Layout.augmentDy(- yDist * factor);
+                n2Layout.augmentDz(- zDist * factor);
             }
         }
     }
@@ -495,13 +555,13 @@ public class ForceFactory {
                 // NB: factor = force / distance
                 double factor = -coefficient * e;
 
-                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
-                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
-                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
+                n1Layout.augmentDx(xDist * factor);
+                n1Layout.augmentDy(yDist * factor);
+                n1Layout.augmentDz(zDist * factor);
 
-                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
-                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
-                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
+                n2Layout.augmentDx(- xDist * factor);
+                n2Layout.augmentDy(- yDist * factor);
+                n2Layout.augmentDz(- zDist * factor);
             }
         }
     }
@@ -532,13 +592,13 @@ public class ForceFactory {
                 // NB: factor = force / distance
                 double factor = -coefficient * e / n1Layout.getMass();
 
-                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
-                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
-                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
+                n1Layout.augmentDx(xDist * factor);
+                n1Layout.augmentDy(yDist * factor);
+                n1Layout.augmentDz(zDist * factor);
 
-                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
-                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
-                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
+                n2Layout.augmentDx(- xDist * factor);
+                n2Layout.augmentDy(- yDist * factor);
+                n2Layout.augmentDz(- zDist * factor);
             }
         }
     }
@@ -570,13 +630,13 @@ public class ForceFactory {
                 // NB: factor = force / distance
                 double factor = -coefficient * e * Math.log(1 + distance) / distance;
 
-                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
-                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
-                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
+                n1Layout.augmentDx(xDist * factor);
+                n1Layout.augmentDy(yDist * factor);
+                n1Layout.augmentDz(zDist * factor);
 
-                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
-                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
-                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
+                n2Layout.augmentDx(- xDist * factor);
+                n2Layout.augmentDy(- yDist * factor);
+                n2Layout.augmentDz(- zDist * factor);
             }
         }
     }
@@ -608,13 +668,13 @@ public class ForceFactory {
                 // NB: factor = force / distance
                 double factor = -coefficient * e * Math.log(1 + distance) / distance / n1Layout.getMass();
 
-                n1Layout.setDx(n1Layout.getDx() + xDist * factor);
-                n1Layout.setDy(n1Layout.getDy() + yDist * factor);
-                n1Layout.setDz(n1Layout.getDz() + zDist * factor);
+                n1Layout.augmentDx(xDist * factor);
+                n1Layout.augmentDy(yDist * factor);
+                n1Layout.augmentDz(zDist * factor);
 
-                n2Layout.setDx(n2Layout.getDx() - xDist * factor);
-                n2Layout.setDy(n2Layout.getDy() - yDist * factor);
-                n2Layout.setDz(n2Layout.getDz() - zDist * factor);
+                n2Layout.augmentDx(- xDist * factor);
+                n2Layout.augmentDy(- yDist * factor);
+                n2Layout.augmentDz(- zDist * factor);
             }
         }
     }

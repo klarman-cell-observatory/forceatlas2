@@ -106,7 +106,7 @@ public class Region {
         }
     }
 
-    public synchronized void updateAllMassAndGeometry(boolean recursive) {
+    public void updateAllMassAndGeometry(boolean recursive) {
         this.updateMassAndGeometry();
         if (recursive && nodes.size() > 1) {
             for (Region subregion : subregions) {
@@ -115,7 +115,7 @@ public class Region {
         }
     }
 
-    private synchronized List<ArrayList<Node>> partitionZ(ArrayList<Node> nodesToAdd) {
+    private List<ArrayList<Node>> partitionZ(ArrayList<Node> nodesToAdd) {
         ArrayList<Node> frontNodes = new ArrayList<>();
         ArrayList<Node> backNodes = new ArrayList<>();
         for (Node n : nodesToAdd) {
@@ -125,13 +125,13 @@ public class Region {
         return Arrays.asList(frontNodes, backNodes);
     }
 
-    private synchronized void addSubRegions(List<ArrayList<Node>> lists) {
+    private void addSubRegions(List<ArrayList<Node>> lists) {
         for (ArrayList<Node> nodesToAdd : lists) {
             addSubRegions(nodesToAdd);
         }
     }
 
-    private synchronized void addSubRegions(ArrayList<Node> nodesToAdd) {
+    private void addSubRegions(ArrayList<Node> nodesToAdd) {
         if (nodesToAdd.size() > 0) {
             if (nodesToAdd.size() < nodes.size()) {
                 Region subregion = new Region(nodesToAdd, is3d);
@@ -147,7 +147,7 @@ public class Region {
         }
     }
 
-    public synchronized void buildSubRegions(boolean recursive) {
+    public void buildSubRegions(boolean recursive) {
         if (is3d) {
             this.buildSubRegions3D(recursive);
         } else {
@@ -178,62 +178,14 @@ public class Region {
                 nodesLine.add(n);
             }
 
-            if (topleftNodes.size() > 0) {
-                if (topleftNodes.size() < nodes.size()) {
-                    Region subregion = new Region(topleftNodes, is3d);
-                    subregions.add(subregion);
-                } else {
-                    for (Node n : topleftNodes) {
-                        ArrayList<Node> oneNodeList = new ArrayList<>();
-                        oneNodeList.add(n);
-                        Region subregion = new Region(oneNodeList, is3d);
-                        subregions.add(subregion);
-                    }
-                }
-            }
-            if (bottomleftNodes.size() > 0) {
-                if (bottomleftNodes.size() < nodes.size()) {
-                    Region subregion = new Region(bottomleftNodes, is3d);
-                    subregions.add(subregion);
-                } else {
-                    for (Node n : bottomleftNodes) {
-                        ArrayList<Node> oneNodeList = new ArrayList<>();
-                        oneNodeList.add(n);
-                        Region subregion = new Region(oneNodeList, is3d);
-                        subregions.add(subregion);
-                    }
-                }
-            }
-            if (bottomrightNodes.size() > 0) {
-                if (bottomrightNodes.size() < nodes.size()) {
-                    Region subregion = new Region(bottomrightNodes, is3d);
-                    subregions.add(subregion);
-                } else {
-                    for (Node n : bottomrightNodes) {
-                        ArrayList<Node> oneNodeList = new ArrayList<>();
-                        oneNodeList.add(n);
-                        Region subregion = new Region(oneNodeList, is3d);
-                        subregions.add(subregion);
-                    }
-                }
-            }
-            if (toprightNodes.size() > 0) {
-                if (toprightNodes.size() < nodes.size()) {
-                    Region subregion = new Region(toprightNodes, is3d);
-                    subregions.add(subregion);
-                } else {
-                    for (Node n : toprightNodes) {
-                        ArrayList<Node> oneNodeList = new ArrayList<>();
-                        oneNodeList.add(n);
-                        Region subregion = new Region(oneNodeList, is3d);
-                        subregions.add(subregion);
-                    }
-                }
-            }
+            addSubRegions(topleftNodes);
+            addSubRegions(bottomleftNodes);
+            addSubRegions(bottomrightNodes);
+            addSubRegions(toprightNodes);
 
             if (recursive) {
                 for (Region subregion : subregions) {
-                    subregion.buildSubRegions(true);
+                    subregion.buildSubRegions(recursive);
                 }
             }
         }
@@ -278,7 +230,7 @@ public class Region {
     public void applyForce(Node n, RepulsionForce Force, double theta) {
         if (nodes.size() < 2) {
             Node regionNode = nodes.get(0);
-            Force.apply(n, regionNode);
+            Force.apply_BH(n, regionNode);
         } else {
             double distance = Math.sqrt((n.x() - massCenterX) * (n.x() - massCenterX) + (n.y() - massCenterY) * (n.y() - massCenterY) + (n.z() - massCenterZ) * (n.z() - massCenterZ));
             if (distance * theta > size) {
@@ -304,13 +256,11 @@ public class Region {
         return massCenterX;
     }
 
-    public double getMassCenterZ() {
-        return massCenterZ;
-    }
-
-
     public double getMassCenterY() {
         return massCenterY;
     }
 
+    public double getMassCenterZ() {
+        return massCenterZ;
+    }
 }

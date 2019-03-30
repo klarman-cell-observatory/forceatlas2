@@ -53,12 +53,12 @@ public class Main {
         }
     }
 
-    private static void addArg(String flag, String description, boolean required, Object defaultValue) {
-        argsMap.put("--" + flag.toLowerCase(), new Arg(flag, description, required, "" + defaultValue));
+    private static void addArg(String flag, String description, boolean not_boolean, Object defaultValue) {
+        argsMap.put("--" + flag.toLowerCase(), new Arg(flag, description, not_boolean, "" + defaultValue));
     }
 
-    private static void addArg(String flag, String description, boolean required) {
-        argsMap.put("--" + flag.toLowerCase(), new Arg(flag, description, required, null));
+    private static void addArg(String flag, String description, boolean not_boolean) {
+        argsMap.put("--" + flag.toLowerCase(), new Arg(flag, description, not_boolean, null));
     }
 
     private static String getArg(String flag) {
@@ -67,36 +67,41 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
+        long startTime = System.currentTimeMillis();
+
         addArg("input", "Input graph in one of Gephi input file formats https://gephi.org/users/supported-graph-formats/", true);
         addArg("output", "Output file", true);
-        addArg("nsteps", "Number of iterations", false, 1000);
-        addArg("barnesHutOptimize", "Whether to use Barnes-Hut optimization (true or false)", false, true);
-        addArg("undirected", "Whether input graph is undirected", false, true);
-        addArg("nthreads", "Number of threads to use. If not specified will use all cores", false);
-        addArg("barnesHutSplits", "Number of splits to use for Barnes-Hut tree building. Number of threads used is 8 to the power barnesHutSplits", false);
-        addArg("format", "Output file format. One of csv, gdf, gexf, gml, graphml, pajek, txt", false);
-        addArg("coords", "Tab separated file containing initial coordinates with headers id, x, y, and, z", false);
-        addArg("barnesHutTheta", " Theta of the Barnes Hut optimization", false);
-        addArg("jitterTolerance", "How much swinging you allow. Above 1 discouraged. Lower gives less speed and more precision.", false);
-        addArg("linLogMode", "Switch ForceAtlas' model from lin-lin to lin-log (tribute to Andreas Noack). Makes clusters more tight.", false);
-        addArg("scalingRatio", "How much repulsion you want. More makes a more sparse graph", false);
-        addArg("gravity", "Attracts nodes to the center", false);
-        addArg("strongGravityMode", "A stronger gravity law", false);
-        addArg("outboundAttractionDistribution", "Distributes attraction along outbound edges. Hubs attract less and thus are pushed to the borders.", false);
-        addArg("seed", "Seed for random number generation for initial node positions", false);
-        addArg("barnesHutUpdateIter", "Update Barnes-Hut tree every barnesHutUpdateIter iterations", false);
-        addArg("updateCenter", "Update Barnes-Hut region centers when not rebuilding Barnes-Hut tree", false);
-        addArg("2d", "Generate a 2d layout", false);
+        addArg("nsteps", "Number of iterations", true);
+        addArg("targetChangePerNode", "Maximum change per node to stop the algorithm", true);
+        addArg("2d", "Generate a 2d layout", false, false);
+        addArg("directed", "Whether input graph is undirected", false, false);
+        addArg("nthreads", "Number of threads to use. If not specified will use all cores", true);
+        addArg("format", "Output file format. One of csv, gdf, gexf, gml, graphml, pajek, txt", true);
+        addArg("coords", "Tab separated file containing initial coordinates with headers id, x, y, and, z", true);
+        addArg("seed", "Seed for random number generation for initial node positions", true);
+        addArg("barnesHutSplits", "Rounds of splits to use for Barnes-Hut tree building. Number of regions after splitting is 4^barnesHutSplits for 2D and 8^barnesHutSplits for 3D", true);
+        addArg("barnesHutTheta", " Theta of the Barnes Hut optimization", true);
+        addArg("barnesHutUpdateIter", "Update Barnes-Hut tree every barnesHutUpdateIter iterations", true);
+        addArg("updateCenter", "Update Barnes-Hut region centers when not rebuilding Barnes-Hut tree", false, false);
+        addArg("jitterTolerance", "How much swinging you allow. Above 1 discouraged. Lower gives less speed and more precision.", true);
+        addArg("linLogMode", "Switch ForceAtlas' model from lin-lin to lin-log (tribute to Andreas Noack). Makes clusters more tight.", true);
+        addArg("scalingRatio", "How much repulsion you want. More makes a more sparse graph", true);
+        addArg("gravity", "Attracts nodes to the center", true);
+        addArg("strongGravityMode", "A stronger gravity law", true);
+        addArg("outboundAttractionDistribution", "Distributes attraction along outbound edges. Hubs attract less and thus are pushed to the borders.", true);
 
         for (int i = 0; i < args.length; i++) {
             Arg a = argsMap.get(args[i].toLowerCase());
             if (a == null) {
                 System.err.println("Unknown argument " + args[i]);
-                continue;
+                System.exit(1);
             }
-            String value = args[++i];
+            String value = a.not_boolean ? args[++i] : "true";
             a.value = value;
         }
+
+        int nsteps = 0;
+        double targetChangePerNode = 0.0;
 
         Long seed = null;
         boolean is3d = true;
@@ -120,12 +125,31 @@ public class Main {
             System.err.println(file + " not found.");
             System.exit(1);
         }
+
         String output = getArg("output");
-        int nsteps = Integer.parseInt(getArg("nsteps"));
-        boolean barnesHutOptimize = getArg("barnesHutOptimize").equalsIgnoreCase("true");
+        
+        if (getArg("nsteps") != null) {
+            nsteps = Integer.parseInt(getArg("nsteps"));
+        }
+
+        if (getArg("targetChangePerNode") != null) {
+            targetChangePerNode = Double.parseDouble(getArg("targetChangePerNode"));
+        }
+
+        if (nsteps == 0 && targetChangePerNode == 0.0) {
+            System.err.println("Either --nsteps or --targetChangePerNode must be set!");
+            System.exit(1);            
+        }
+
+        if (nsteps > 0 && targetChangePerNode > 0.0) {
+            System.err.println("--nsteps and --targetChangePerNode are mutually exclusive!");
+            System.exit(1);
+        }
+
         if (getArg("barnesHutSplits") != null) {
             barnesHutSplits = Integer.parseInt(getArg("barnesHutSplits"));
         }
+        
         if (getArg("nthreads") != null) {
             threadCount = Integer.parseInt(getArg("nthreads"));
         }
@@ -133,39 +157,47 @@ public class Main {
         if (getArg("barnesHutTheta") != null) {
             barnesHutTheta = Double.parseDouble(getArg("barnesHutTheta"));
         }
+        
         if (getArg("jitterTolerance") != null) {
             jitterTolerance = Double.parseDouble(getArg("jitterTolerance"));
         }
+        
         if (getArg("linLogMode") != null) {
             linLogMode = getArg("linLogMode").equalsIgnoreCase("true");
         }
+        
         if (getArg("scalingRatio") != null) {
             scalingRatio = Double.parseDouble(getArg("scalingRatio"));
         }
+        
         if (getArg("gravity") != null) {
             gravity = Double.parseDouble(getArg("gravity"));
         }
+        
         if (getArg("strongGravityMode") != null) {
             strongGravityMode = getArg("strongGravityMode").equalsIgnoreCase("true");
         }
+        
         if (getArg("outboundAttractionDistribution") != null) {
             outboundAttractionDistribution = getArg("outboundAttractionDistribution").equalsIgnoreCase("true");
         }
+        
         if (getArg("seed") != null) {
             seed = Long.parseLong(getArg("seed"));
         }
+        
         if (getArg("format") != null) {
             formats.add(getArg("format"));
         }
+        
         if (getArg("barnesHutUpdateIter") != null) {
             barnesHutUpdateIter = Integer.parseInt(getArg("barnesHutUpdateIter"));
         }
-        if (getArg("updateCenter") != null) {
-            updateCenter = getArg("updateCenter").equalsIgnoreCase("true");
-        }
-        if (getArg("2d") != null) {
-            is3d = !getArg("2d").equalsIgnoreCase("true");
-        }
+        
+        updateCenter = getArg("updateCenter").equalsIgnoreCase("true");
+
+        is3d = !getArg("2d").equalsIgnoreCase("true");
+
         if (getArg("coords") != null) {
             coordsFile = new File(getArg("coords"));
             if (!coordsFile.exists()) {
@@ -185,20 +217,21 @@ public class Main {
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         Container container = importController.importFile(file);
         Graph g;
-        if (getArg("undirected").equals("true")) {
+        if (!getArg("directed").equalsIgnoreCase("true")) {
             container.getLoader().setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
             g = graphModel.getUndirectedGraph();
         } else {
             container.getLoader().setEdgeDefault(EdgeDirectionDefault.DIRECTED);
             g = graphModel.getDirectedGraph();
         }
-        Graph graph = graphModel.getGraph();
         importController.process(container, new DefaultProcessor(), workspace);
         org.gephi.layout.plugin.forceAtlas2_3d.ForceAtlas2 layout = new org.gephi.layout.plugin.forceAtlas2_3d.ForceAtlas2(null, is3d);
         layout.setGraphModel(graphModel);
         Random random = seed != null ? new Random(seed) : new Random();
 
-        for (Node node : graph.getNodes()) {
+        int num_nodes = 0;
+        for (Node node : g.getNodes()) {
+            ++num_nodes;
             node.setX((float) ((0.01 + random.nextDouble()) * 1000) - 500);
             node.setY((float) ((0.01 + random.nextDouble()) * 1000) - 500);
             if (is3d) {
@@ -207,6 +240,7 @@ public class Main {
                 node.setZ(0);
             }
         }
+
         if (coordsFile != null) {
             Map<Object, Node> idToNode = new HashMap<>();
             for (Node n : g.getNodes()) {
@@ -244,8 +278,6 @@ public class Main {
             br.close();
         }
 
-
-        layout.setBarnesHutOptimize(barnesHutOptimize);
         if (barnesHutTheta != null) {
             layout.setBarnesHutTheta(barnesHutTheta);
         }
@@ -280,62 +312,84 @@ public class Main {
 
 
         layout.initAlgo();
+        
         final Set<String> _formats = formats;
         final String _output = output;
         final Graph _g = g;
         final Layout _layout = layout;
         final boolean _is3d = is3d;
-        final PrintWriter distanceWriter = new PrintWriter(new FileWriter(output + ".distances.txt"));
-        distanceWriter.print("step\tdistance\n");
+        final PrintWriter distanceWriter = (nsteps > 0 ? new PrintWriter(new FileWriter(output + ".distances.txt")) : null);
+
+        if (nsteps > 0) distanceWriter.print("step\tdistance\n");
 
         Thread shutdownThread = new Thread() {
             @Override
             public void run() {
                 _layout.endAlgo();
                 writeOutput(_g, _is3d, _formats, _output);
-                distanceWriter.close();
+                if (distanceWriter != null) distanceWriter.close();
             }
         };
         Runtime.getRuntime().addShutdownHook(shutdownThread);
-        int lastPercent = 0;
-        for (int i = 0; i < nsteps; i++) {
-            layout.goAlgo();
 
-            double distance = layout.getDistance();
-            distanceWriter.print(i);
-            distanceWriter.print("\t");
-            distanceWriter.print(distance);
-            distanceWriter.print("\n");
-            distanceWriter.flush();
-
-            int percent = (int) Math.floor(100 * (i + 1.0) / nsteps);
-            if (percent != lastPercent) {
-                System.out.print("*");
-                lastPercent = percent;
-                if (percent % 25 == 0) {
-                    System.out.println(percent + "%");
-                }
-            }
-        }
         if (nsteps > 0) {
-            System.out.println();
+            int lastPercent = 0;
+            double distance;
+
+            for (int i = 0; i < nsteps; i++) {
+                layout.goAlgo();
+
+                distance = layout.getDistance();
+                distanceWriter.print(i);
+                distanceWriter.print("\t");
+                distanceWriter.print(distance);
+                distanceWriter.print("\n");
+                distanceWriter.flush();
+
+                int percent = (int) Math.floor(100 * (i + 1.0) / nsteps);
+                if (percent != lastPercent) {
+                    System.out.print("*");
+                    lastPercent = percent;
+                    if (percent % 25 == 0) {
+                        System.out.println(percent + "%");
+                    }
+                }
+            }            
+        } else {
+            nsteps = 0;
+            double changePerNode;
+
+            do {
+                ++nsteps;
+                layout.goAlgo();
+                changePerNode = layout.getDistance() / num_nodes;
+                if (nsteps % 500 == 0) System.out.println(nsteps + " iterations, change_per_node = " + changePerNode);
+            } while (nsteps == 1 || changePerNode > targetChangePerNode);
+
+            System.out.println("Finished in " + nsteps + " iterations, change_per_node = " + changePerNode);
         }
+
+        Runtime.getRuntime().removeShutdownHook(shutdownThread);
+
         layout.endAlgo();
-//        Runtime.getRuntime().removeShutdownHook(shutdownThread);
-//        writeOutput(g, is3d, formats, output);
+        writeOutput(g, is3d, formats, output);
+        if (distanceWriter != null) distanceWriter.close();
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time = " + (endTime - startTime) / 1000.0 + "s");
     }
 
     private static class Arg {
         String flag;
         String description;
-        boolean required;
+        boolean not_boolean;
         String defaultValue;
         String value;
 
-        private Arg(String flag, String description, boolean required, String defaultValue) {
+        private Arg(String flag, String description, boolean not_boolean, String defaultValue) {
             this.flag = flag;
             this.description = description;
-            this.required = required;
+            this.not_boolean = not_boolean;
             this.defaultValue = defaultValue;
             if (defaultValue != null) {
                 this.value = defaultValue;

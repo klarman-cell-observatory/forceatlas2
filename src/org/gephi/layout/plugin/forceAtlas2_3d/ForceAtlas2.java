@@ -132,7 +132,7 @@ public class ForceAtlas2 implements Layout {
         edges = graph.getEdges().toArray();
         pool = Executors.newFixedThreadPool(threadCount);
         if (this.barnesHutSplits == -1) {
-            this.barnesHutSplits = (int) Math.max(1, Math.ceil(this.threadCount / (is3d ? 8.0 : 4.0)));
+            this.barnesHutSplits = (int) Math.floor(Math.log(this.threadCount) / Math.log(is3d ? 8.0 : 4.0) + 0.02) + 1;
         }
         // Initialise layout data
         for (Node n : nodes) {
@@ -206,8 +206,6 @@ public class ForceAtlas2 implements Layout {
                 waitForFutures(futures);
             }
         }
-
-
     }
 
     private void repulsionAndGravity() {
@@ -221,10 +219,8 @@ public class ForceAtlas2 implements Layout {
             int from = (int) Math.floor(nodes.length * (t - 1) / currentThreadCount);
             int to = (int) Math.floor(nodes.length * t / currentThreadCount);
             futures.add(pool.submit(new NodesThread(nodes, from, to, isBarnesHutOptimize(), getBarnesHutTheta(), getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio())) : (Repulsion), getScalingRatio(), rootRegion, Repulsion)));
-
         }
         waitForFutures(futures);
-
     }
 
     private void outboundAttractionDistribution() {
@@ -740,7 +736,7 @@ public class ForceAtlas2 implements Layout {
         public Double call() {
             double distance = 0;
             if (adjustSizes) {
-                // If nodes overlap prevention is active, it's not possible to trust the swinging mesure.
+                // If nodes overlap prevention is active, it's not possible to trust the swinging measure.
                 for (Node n : nodes) {
                     ForceAtlas2LayoutData nLayout = n.getLayoutData();
                     if (!n.isFixed()) {
@@ -765,7 +761,6 @@ public class ForceAtlas2 implements Layout {
                     }
                 }
             } else {
-
                 for (Node n : nodes) {
                     ForceAtlas2LayoutData nLayout = n.getLayoutData();
                     if (!n.isFixed()) {
@@ -774,7 +769,6 @@ public class ForceAtlas2 implements Layout {
                         // when the node swings.
                         double swinging = nLayout.getMass() * Math.sqrt((nLayout.getOld_dx() - nLayout.getDx()) * (nLayout.getOld_dx() - nLayout.getDx()) + (nLayout.getOld_dy() - nLayout.getDy()) * (nLayout.getOld_dy() - nLayout.getDy())
                                 + (nLayout.getOld_dz() - nLayout.getDz()) * (nLayout.getOld_dz() - nLayout.getDz()));
-                        //double factor = speed / (1f + Math.sqrt(speed * swinging));
                         double factor = speed / (1f + Math.sqrt(speed * swinging));
 
                         double x = n.x() + nLayout.getDx() * factor;
