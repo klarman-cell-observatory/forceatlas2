@@ -139,7 +139,6 @@ public class Main {
         if (getArg("targetChangePerNode") != null) {
             targetChangePerNode = Double.parseDouble(getArg("targetChangePerNode"));
             targetSteps = Integer.parseInt(getArg("targetSteps"));
-            System.out.println(targetChangePerNode + " " + targetSteps);
         }
 
         if (nsteps == 0 && targetChangePerNode == 0.0) {
