@@ -25,7 +25,7 @@ Flag | Description | Default Value
 --input | Input graph in one of Gephi input file formats https://gephi.org/users/supported-graph-formats/ |
 --output | Output file | 
 --nsteps | Number of iterations | 
---targetChangePerNode | Target distance change per node before stop the algorithm | 
+--targetChangePerNode | Target distance change per node before stop the algorithm. If cannot reach the target within 5,000 iterations, the algorithm will also stop. | 
 --2d | Whether to produce a 2d layout | false
 --directed | Whether input graph is directed | false
 --nthreads | Number of threads to use. | All cores
