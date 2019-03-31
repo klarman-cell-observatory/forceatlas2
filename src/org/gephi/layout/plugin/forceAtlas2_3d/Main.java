@@ -72,7 +72,7 @@ public class Main {
         addArg("input", "Input graph in one of Gephi input file formats https://gephi.org/users/supported-graph-formats/", true);
         addArg("output", "Output file", true);
         addArg("nsteps", "Number of iterations", true);
-        addArg("targetChangePerNode", "Maximum change per node to stop the algorithm. If cannot reach the target within 5,000 iterations, the algorithm will also stop.", true);
+        addArg("targetChangePerNode", "Maximum change per node to stop the algorithm. If cannot reach the target within 10,000 iterations, the algorithm will also stop.", true);
         addArg("2d", "Generate a 2d layout", false, false);
         addArg("useAltSpeed", "Use alternative speed calculation, which is documented in the ForceAtlas2 paper.", false, false);
         addArg("directed", "Whether input graph is undirected", false, false);
@@ -367,7 +367,7 @@ public class Main {
                 layout.goAlgo();
                 changePerNode = layout.getDistance() / num_nodes;
                 if (nsteps % 100 == 0) System.out.println(nsteps + " iterations, change_per_node = " + changePerNode);
-            } while (nsteps == 1 || changePerNode > targetChangePerNode && nsteps <= 5000);
+            } while (nsteps == 1 || changePerNode > targetChangePerNode && nsteps < 10000);
 
             System.out.println("Finished in " + nsteps + " iterations, change_per_node = " + changePerNode);
         }
