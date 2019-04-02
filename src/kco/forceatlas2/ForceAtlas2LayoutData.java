@@ -39,31 +39,50 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2_3d;
+package kco.forceatlas2;
 
-import org.gephi.graph.api.Node;
-import org.gephi.layout.plugin.forceAtlas2_3d.ForceFactory.AttractionForce;
-import org.gephi.layout.plugin.forceAtlas2.Operation;
+import org.gephi.graph.spi.LayoutData;
 
 /**
+ * Data stored in Nodes and used by ForceAtlas2
+ *
  * @author Mathieu Jacomy
  */
-public class OperationNodeNodeAttract extends Operation {
+public interface ForceAtlas2LayoutData extends LayoutData {
 
-    private final Node n1;
-    private final Node n2;
-    private final AttractionForce f;
-    private final double coefficient;
 
-    public OperationNodeNodeAttract(Node n1, Node n2, AttractionForce f, double coefficient) {
-        this.n1 = n1;
-        this.n2 = n2;
-        this.f = f;
-        this.coefficient = coefficient;
-    }
+    public double getDx();
 
-    @Override
-    public void execute() {
-        f.apply(n1, n2, coefficient);
-    }
+    public void setDx(double dx);
+
+    public double getDy();
+
+    public void setDy(double dy);
+
+    public double getDz();
+
+    public void setDz(double dz);
+
+    public double getOld_dx();
+
+    public void setOld_dx(double old_dx);
+
+    public double getOld_dy();
+
+    public void setOld_dy(double old_dy);
+
+    public double getOld_dz();
+
+    public void setOld_dz(double old_dz);
+
+    public double getMass();
+
+    public void setMass(double mass);
+
+    // synchronized augment functions, only used for updating attraction force
+    public void augmentDx(double ddx);
+
+    public void augmentDy(double ddy);
+
+    public void augmentDz(double ddz);
 }

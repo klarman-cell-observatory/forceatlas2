@@ -39,31 +39,28 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2_3d;
+package kco.forceatlas2;
 
 import org.gephi.graph.api.Node;
-import org.gephi.layout.plugin.forceAtlas2_3d.ForceFactory.RepulsionForce;
 import org.gephi.layout.plugin.forceAtlas2.Operation;
+
 /**
- *
  * @author Mathieu Jacomy
  */
-public class OperationNodeRegionRepulse extends Operation {
+public class OperationNodeRepulse extends Operation {
 
-    private final Node n;
-    private final Region r;
-    private final RepulsionForce f;
-    private final double theta;
+    private Node n;
+    private ForceFactory.RepulsionForce f;
+    private double coefficient;
 
-    public OperationNodeRegionRepulse(Node n, Region r, RepulsionForce f, double theta) {
+    public OperationNodeRepulse(Node n, ForceFactory.RepulsionForce f, double coefficient) {
         this.n = n;
         this.f = f;
-        this.r = r;
-        this.theta = theta;
+        this.coefficient = coefficient;
     }
 
     @Override
     public void execute() {
-        r.applyForce(n, f, theta);
+        f.apply(n, coefficient);
     }
 }

@@ -1,4 +1,4 @@
-package org.gephi.layout.plugin.forceAtlas2_3d;
+package kco.forceatlas2;
 
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
@@ -231,7 +231,7 @@ public class Main {
             g = graphModel.getDirectedGraph();
         }
         importController.process(container, new DefaultProcessor(), workspace);
-        org.gephi.layout.plugin.forceAtlas2_3d.ForceAtlas2 layout = new org.gephi.layout.plugin.forceAtlas2_3d.ForceAtlas2(null, is3d, useAltSpeed);
+        ForceAtlas2 layout = new ForceAtlas2(null, is3d, useAltSpeed);
         layout.setGraphModel(graphModel);
         Random random = seed != null ? new Random(seed) : new Random();
 

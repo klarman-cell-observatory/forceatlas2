@@ -39,10 +39,9 @@
 
  Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2_3d;
+package kco.forceatlas2;
 
 import org.gephi.graph.api.Node;
-import org.gephi.layout.plugin.forceAtlas2_3d.ForceFactory.RepulsionForce;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -227,7 +226,7 @@ public class Region {
         }
     }
 
-    public void applyForce(Node n, RepulsionForce Force, double theta) {
+    public void applyForce(Node n, ForceFactory.RepulsionForce Force, double theta) {
         if (nodes.size() < 2) {
             Node regionNode = nodes.get(0);
             Force.apply_BH(n, regionNode);

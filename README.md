@@ -7,15 +7,13 @@
 - Parallel force, attraction, and speed computations
 - Option to rebuild Barnes-Hut tree every n iterations
 - Option to update Barnes-Hut tree centers every n iterations
-
-
 - Command line interface 
 
 
 ## Command Line Usage
 
 ```
-java -Djava.awt.headless=true -Xmx8g -cp dist/forceatlas2-3d.jar:lib/gephi-toolkit-0.9.2-all.jar org.gephi.layout.plugin.forceAtlas2_3d.Main flags 
+java -Djava.awt.headless=true -Xmx8g -cp dist/forceatlas2.jar:lib/gephi-toolkit-0.9.2-all.jar kco.forceatlas2.Main flags 
 ```
 
 where flags are

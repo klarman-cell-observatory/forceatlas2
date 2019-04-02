@@ -39,11 +39,9 @@
 
  Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2_3d;
+package kco.forceatlas2;
 
 import org.gephi.graph.api.*;
-import org.gephi.layout.plugin.forceAtlas2_3d.ForceFactory.AttractionForce;
-import org.gephi.layout.plugin.forceAtlas2_3d.ForceFactory.RepulsionForce;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
@@ -214,7 +212,7 @@ public class ForceAtlas2 implements Layout {
 
         // Repulsion (and gravity)
         // NB: Muti-threaded
-        RepulsionForce Repulsion = ForceFactory.builder.buildRepulsion(isAdjustSizes(), getScalingRatio());
+        ForceFactory.RepulsionForce Repulsion = ForceFactory.builder.buildRepulsion(isAdjustSizes(), getScalingRatio());
 
         List<Future> futures = new ArrayList<>();
         for (int t = currentThreadCount; t > 0; t--) {
@@ -265,7 +263,7 @@ public class ForceAtlas2 implements Layout {
     private void attraction(final boolean isDynamicWeight, final Interval interval) {
         List<Future> futures = new ArrayList<>();
 
-        final AttractionForce Attraction = ForceFactory.builder.buildAttraction(isLinLogMode(), isOutboundAttractionDistribution(), isAdjustSizes(), 1 * ((isOutboundAttractionDistribution()) ? (outboundAttCompensation) : (1)));
+        final ForceFactory.AttractionForce Attraction = ForceFactory.builder.buildAttraction(isLinLogMode(), isOutboundAttractionDistribution(), isAdjustSizes(), 1 * ((isOutboundAttractionDistribution()) ? (outboundAttCompensation) : (1)));
         int taskCount = currentThreadCount;
         List<Edge> edgeList = Arrays.asList(edges);
         final Double edgeWeightInfluence = getEdgeWeightInfluence();
@@ -829,12 +827,12 @@ public class ForceAtlas2 implements Layout {
 
     private static class AttractionTask implements Runnable {
         private Collection<Edge> edges;
-        private AttractionForce Attraction;
+        private ForceFactory.AttractionForce Attraction;
         private boolean isDynamicWeight;
         private Interval interval;
         private double edgeWeightInfluence;
 
-        private AttractionTask(Collection<Edge> edges, AttractionForce attraction, boolean isDynamicWeight, Interval interval, double edgeWeightInfluence) {
+        private AttractionTask(Collection<Edge> edges, ForceFactory.AttractionForce attraction, boolean isDynamicWeight, Interval interval, double edgeWeightInfluence) {
             this.edges = edges;
             Attraction = attraction;
             this.isDynamicWeight = isDynamicWeight;

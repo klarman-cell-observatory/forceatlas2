@@ -39,29 +39,35 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2_3d;
-
-import org.gephi.graph.api.Node;
-import org.gephi.layout.plugin.forceAtlas2_3d.ForceFactory.RepulsionForce;
-import org.gephi.layout.plugin.forceAtlas2.Operation;
+package kco.forceatlas2;
 
 /**
+ * Data stored in Nodes and used by ForceAtlas2
+ *
  * @author Mathieu Jacomy
  */
-public class OperationNodeNodeRepulse extends Operation {
+public class ForceAtlas2LayoutData3d extends ForceAtlas2LayoutData2d {
 
-    private final Node n1;
-    private final Node n2;
-    private final RepulsionForce f;
+    private double dz;
+    private double old_dz;
 
-    public OperationNodeNodeRepulse(Node n1, Node n2, RepulsionForce f) {
-        this.n1 = n1;
-        this.n2 = n2;
-        this.f = f;
+    public double getDz() {
+        return dz;
     }
 
-    @Override
-    public void execute() {
-        f.apply(n1, n2);
+    public void setDz(double dz) {
+        this.dz = dz;
+    }
+
+    public double getOld_dz() {
+        return old_dz;
+    }
+
+    public void setOld_dz(double old_dz) {
+        this.old_dz = old_dz;
+    }
+
+    public synchronized void augmentDz(double ddz) {
+        this.dz += ddz;
     }
 }

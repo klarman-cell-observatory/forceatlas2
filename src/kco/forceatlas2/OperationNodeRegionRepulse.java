@@ -39,50 +39,30 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2_3d;
+package kco.forceatlas2;
 
-import org.gephi.graph.spi.LayoutData;
-
+import org.gephi.graph.api.Node;
+import org.gephi.layout.plugin.forceAtlas2.Operation;
 /**
- * Data stored in Nodes and used by ForceAtlas2
  *
  * @author Mathieu Jacomy
  */
-public interface ForceAtlas2LayoutData extends LayoutData {
+public class OperationNodeRegionRepulse extends Operation {
 
+    private final Node n;
+    private final Region r;
+    private final ForceFactory.RepulsionForce f;
+    private final double theta;
 
-    public double getDx();
+    public OperationNodeRegionRepulse(Node n, Region r, ForceFactory.RepulsionForce f, double theta) {
+        this.n = n;
+        this.f = f;
+        this.r = r;
+        this.theta = theta;
+    }
 
-    public void setDx(double dx);
-
-    public double getDy();
-
-    public void setDy(double dy);
-
-    public double getDz();
-
-    public void setDz(double dz);
-
-    public double getOld_dx();
-
-    public void setOld_dx(double old_dx);
-
-    public double getOld_dy();
-
-    public void setOld_dy(double old_dy);
-
-    public double getOld_dz();
-
-    public void setOld_dz(double old_dz);
-
-    public double getMass();
-
-    public void setMass(double mass);
-
-    // synchronized augment functions, only used for updating attraction force
-    public void augmentDx(double ddx);
-
-    public void augmentDy(double ddy);
-
-    public void augmentDz(double ddz);
+    @Override
+    public void execute() {
+        r.applyForce(n, f, theta);
+    }
 }

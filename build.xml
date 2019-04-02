@@ -1,4 +1,4 @@
-<project name="forceatlas2-3d" default="jar" basedir=".">
+<project name="forceatlas2" default="jar" basedir=".">
     <target name="clean">
         <delete dir="build"></delete>
     </target>
@@ -8,7 +8,7 @@
     </target>
     <target name="jar" depends="clean, compile">
         <mkdir dir="dist"/>
-        <jar destfile="dist/forceatlas2-3d.jar"
+        <jar destfile="dist/forceatlas2.jar"
              basedir="build"/>
     </target>
 </project>

@@ -39,35 +39,86 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2_3d;
+package kco.forceatlas2;
 
 /**
  * Data stored in Nodes and used by ForceAtlas2
  *
  * @author Mathieu Jacomy
  */
-public class ForceAtlas2LayoutData3d extends ForceAtlas2LayoutData2d {
+public class ForceAtlas2LayoutData2d implements ForceAtlas2LayoutData {
+    //Data
+    private double dx;
+    private double dy;
+    private double old_dx;
+    private double old_dy;
+    private double mass = 1;
 
-    private double dz;
-    private double old_dz;
+
+    public double getDx() {
+        return dx;
+    }
+
+    public void setDx(double dx) {
+        this.dx = dx;
+    }
+
+    public double getDy() {
+        return dy;
+    }
+
+    public void setDy(double dy) {
+        this.dy = dy;
+    }
 
     public double getDz() {
-        return dz;
+        return 0;
     }
 
     public void setDz(double dz) {
-        this.dz = dz;
+
+    }
+
+    public double getOld_dx() {
+        return old_dx;
+    }
+
+    public void setOld_dx(double old_dx) {
+        this.old_dx = old_dx;
+    }
+
+    public double getOld_dy() {
+        return old_dy;
+    }
+
+    public void setOld_dy(double old_dy) {
+        this.old_dy = old_dy;
     }
 
     public double getOld_dz() {
-        return old_dz;
+        return 0;
     }
 
     public void setOld_dz(double old_dz) {
-        this.old_dz = old_dz;
+
     }
 
-    public synchronized void augmentDz(double ddz) {
-        this.dz += ddz;
+    public double getMass() {
+        return mass;
+    }
+
+    public void setMass(double mass) {
+        this.mass = mass;
+    }
+
+    public synchronized void augmentDx(double ddx) {
+        this.dx += ddx;
+    }
+
+    public synchronized void augmentDy(double ddy) {
+        this.dy += ddy;
+    }
+
+    public void augmentDz(double ddz) {
     }
 }

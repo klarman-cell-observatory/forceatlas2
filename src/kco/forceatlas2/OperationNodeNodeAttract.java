@@ -39,67 +39,30 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2_3d;
+package kco.forceatlas2;
 
-import org.gephi.layout.spi.Layout;
-import org.gephi.layout.spi.LayoutBuilder;
-import org.gephi.layout.spi.LayoutUI;
-import org.openide.util.NbBundle;
-import org.openide.util.lookup.ServiceProvider;
-
-import javax.swing.*;
+import org.gephi.graph.api.Node;
+import org.gephi.layout.plugin.forceAtlas2.Operation;
 
 /**
- * Layout Builder
- *
  * @author Mathieu Jacomy
  */
-@ServiceProvider(service = LayoutBuilder.class)
-public class ForceAtlas2Builder implements LayoutBuilder {
+public class OperationNodeNodeAttract extends Operation {
 
-    private ForceAtlas2UI ui = new ForceAtlas2UI();
+    private final Node n1;
+    private final Node n2;
+    private final ForceFactory.AttractionForce f;
+    private final double coefficient;
 
-    @Override
-    public String getName() {
-        return NbBundle.getMessage(ForceAtlas2.class, "ForceAtlas2.name");
+    public OperationNodeNodeAttract(Node n1, Node n2, ForceFactory.AttractionForce f, double coefficient) {
+        this.n1 = n1;
+        this.n2 = n2;
+        this.f = f;
+        this.coefficient = coefficient;
     }
 
     @Override
-    public LayoutUI getUI() {
-        return ui;
-    }
-
-    @Override
-    public ForceAtlas2 buildLayout() {
-        ForceAtlas2 layout = new ForceAtlas2(this, true, false);
-        return layout;
-    }
-
-    private class ForceAtlas2UI implements LayoutUI {
-
-        @Override
-        public String getDescription() {
-            return NbBundle.getMessage(ForceAtlas2.class, "ForceAtlas2.description");
-        }
-
-        @Override
-        public Icon getIcon() {
-            return null;
-        }
-
-        @Override
-        public JPanel getSimplePanel(Layout layout) {
-            return null;
-        }
-
-        @Override
-        public int getQualityRank() {
-            return 4;
-        }
-
-        @Override
-        public int getSpeedRank() {
-            return 4;
-        }
+    public void execute() {
+        f.apply(n1, n2, coefficient);
     }
 }
