@@ -1,4 +1,4 @@
-# Multithreaded Gephi Force Atlas2 Layout in 2 or 3-d
+# Multithreaded [Gephi](https://gephi.org/) Force Atlas2 Layout in 2 or 3-d
 
 ## Features
 
@@ -41,3 +41,8 @@ Flag | Description | Default Value
 --gravity | Attracts nodes to the center | 1.0
 --strongGravityMode | A stronger gravity law | false
 --outboundAttractionDistribution | Distributes attraction along outbound edges. Hubs attract less and thus are pushed to the borders. | false
+
+
+## Example Datasets
+[Gephi example datasets](https://github.com/gephi/gephi/wiki/Datasets)
+
