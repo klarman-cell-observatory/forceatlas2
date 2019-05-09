@@ -9,11 +9,14 @@
 - Option to update Barnes-Hut tree centers every n iterations
 - Command line interface 
 
+## Installation
+Download gephi-toolkit-0.9.2-all.jar and forceatlas2.jar from https://github.com/klarman-cell-observatory/forceatlas2/releases
+
 
 ## Command Line Usage
 
 ```
-java -Djava.awt.headless=true -Xmx8g -cp dist/forceatlas2.jar:lib/gephi-toolkit-0.9.2-all.jar kco.forceatlas2.Main flags 
+java -Djava.awt.headless=true -Xmx8g -cp forceatlas2.jar:gephi-toolkit-0.9.2-all.jar kco.forceatlas2.Main flags 
 ```
 
 where flags are
