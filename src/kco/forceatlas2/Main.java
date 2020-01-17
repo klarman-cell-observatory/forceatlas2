@@ -267,6 +267,7 @@ public class Main {
             int xIndex = header.indexOf("x");
             int yIndex = header.indexOf("y");
             int zIndex = header.indexOf("z");
+            boolean setZ = zIndex != -1 && is3d;
             while ((s = br.readLine()) != null) {
                 String[] tokens = s.split(sep);
                 String id = tokens[idIndex];
@@ -274,7 +275,7 @@ public class Main {
                 if (n != null) {
                     n.setX(Float.parseFloat(tokens[xIndex]));
                     n.setY(Float.parseFloat(tokens[yIndex]));
-                    if (is3d) {
+                    if (setZ) {
                         n.setZ(Float.parseFloat(tokens[zIndex]));
                     }
                 } else {
