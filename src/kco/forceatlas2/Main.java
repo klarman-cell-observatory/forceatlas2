@@ -73,7 +73,7 @@ public class Main {
         addArg("output", "Output file", true);
         addArg("nsteps", "Number of iterations. Mutually exclusive with --targetChangePerNode", true);
         addArg("targetChangePerNode", "Maximum change per node to stop the algorithm. Mutually exclusive with --nsteps", true);
-        addArg("targetSteps", "Maximum number of iterations before stopping the algoritm. This option is together with --targetChangePerNode", true, 10000);
+        addArg("targetSteps", "Maximum number of iterations before stopping the algorithm. This option is together with --targetChangePerNode", true, 10000);
         addArg("2d", "Generate a 2d layout", false, false);
         addArg("useAltSpeed", "Use alternative speed calculation, which is documented in the ForceAtlas2 paper.", false, false);
         addArg("directed", "Whether input graph is undirected", false, false);
